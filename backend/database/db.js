@@ -9,7 +9,13 @@ const path = require('path');
 const fs = require('fs');
 const { DatabaseSync } = require('node:sqlite');
 
-const DB_PATH = process.env.DB_PATH || path.join(__dirname, 'jobportal.db');
+// Serverless platforms (e.g. Vercel) mount deployment files read-only, so the
+// database must live in a writable scratch directory there. Local behavior is
+// unchanged. NOTE: on such platforms the SQLite file is ephemeral — it does
+// not persist between invocations. See README "Deploying to Vercel".
+const DB_PATH =
+  process.env.DB_PATH ||
+  (process.env.VERCEL ? '/tmp/jobportal.db' : path.join(__dirname, 'jobportal.db'));
 
 // Ensure the database directory exists
 fs.mkdirSync(path.dirname(DB_PATH), { recursive: true });

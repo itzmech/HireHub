@@ -58,9 +58,14 @@ app.use(express.static(FRONTEND_DIR, { extensions: ['html'] }));
 app.use(notFoundHandler); // API 404s (JSON)
 app.use(errorHandler);
 
-const PORT = Number(process.env.PORT) || 3000;
-app.listen(PORT, () => {
-  console.log(`Job Portal API + frontend running at http://localhost:${PORT}`);
-});
+// Start the HTTP server only when this file is run directly
+// (`npm start` / `npm run dev`). When imported (e.g. by the Vercel serverless
+// entry in api/index.js), the app is exported without binding a port.
+if (require.main === module) {
+  const PORT = Number(process.env.PORT) || 3000;
+  app.listen(PORT, () => {
+    console.log(`HireHub API + frontend running at http://localhost:${PORT}`);
+  });
+}
 
 module.exports = app;

@@ -130,6 +130,8 @@ job-portal/
 │   ├── css/style.css
 │   └── js/                     # api client, navbar/guards, per-page scripts
 ├── scripts/api-test.js         # end-to-end API test suite
+├── api/index.js                # Vercel serverless entry (wraps the Express app)
+├── vercel.json                 # Vercel: static output + /api rewrites
 ├── .env.example
 └── package.json
 ```
@@ -140,3 +142,13 @@ job-portal/
 - The Express server hosts both the API and the static frontend, so a single origin works out of the box.
 - Back up `backend/database/jobportal.db` (WAL mode enabled); or point `DB_PATH` at persistent storage.
 - Run `npm run seed` once during provisioning to create the first admin.
+
+### Deploying to Vercel
+
+The repo ships with Vercel configuration (`vercel.json` + `api/index.js`), so importing the project into Vercel works with defaults:
+
+- **Frontend** — the `frontend/` directory is deployed as static output and served from the CDN at `/` (pages like `/login` resolve via a rewrite to `/login.html`).
+- **API** — every `/api/*` request is routed to `api/index.js`, a Node 22 serverless function that wraps the existing Express app (`backend/server.js`) unchanged.
+- **Environment variables** — set `JWT_SECRET` in Project → Settings → Environment Variables (plus `JWT_EXPIRES_IN` if you want a different token TTL). `CORS_ORIGINS` is not needed because the frontend and API share one origin.
+
+**SQLite limitation on Vercel:** serverless deployments get an ephemeral, read-only-filesystem sandbox. The database is created under `/tmp` per cold start, so the schema works and reads succeed, but **any data written (users, jobs, applications) does not persist** between invocations, and concurrent function instances see separate databases. This is fine for a local/demo deployment of the API surface, but for real production data on Vercel you must swap `backend/database/db.js` to a hosted database (e.g. Turso/libSQL, which is SQLite-compatible, or Neon/Supabase Postgres) — the query layer is small and isolated, so only that one file needs to change. `DB_PATH` remains available for persistent-disk hosts (Fly.io, Railway volumes, VPS).
