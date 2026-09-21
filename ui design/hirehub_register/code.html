@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_blank" name="shell-type"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+          "on-surface": "#131b2e",
+          "surface-container-high": "#e2e7ff",
+          "secondary-fixed-dim": "#a2d0c6",
+          "inverse-surface": "#283044",
+          "on-surface-variant": "#3e4947",
+          "tertiary-fixed-dim": "#8fd3cc",
+          "on-secondary": "#ffffff",
+          "secondary": "#3b665f",
+          "tertiary-fixed": "#abefe8",
+          "on-background": "#131b2e",
+          "on-tertiary-fixed": "#00201e",
+          "on-primary": "#ffffff",
+          "on-primary-container": "#a3faef",
+          "surface-variant": "#dae2fd",
+          "primary": "#005c55",
+          "inverse-primary": "#80d5cb",
+          "primary-container": "#0f766e",
+          "error": "#ba1a1a",
+          "surface-bright": "#faf8ff",
+          "tertiary": "#0c5b56",
+          "surface": "#faf8ff",
+          "on-tertiary-fixed-variant": "#00504b",
+          "surface-container-lowest": "#ffffff",
+          "surface-container-low": "#f2f3ff",
+          "on-secondary-fixed": "#00201c",
+          "on-primary-fixed-variant": "#00504a",
+          "on-tertiary-container": "#b3f7f0",
+          "on-secondary-container": "#416c65",
+          "surface-container-highest": "#dae2fd",
+          "outline-variant": "#bdc9c6",
+          "secondary-fixed": "#bdece2",
+          "tertiary-container": "#2f746f",
+          "on-tertiary": "#ffffff",
+          "secondary-container": "#bdece2",
+          "on-error-container": "#93000a",
+          "on-error": "#ffffff",
+          "surface-dim": "#d2d9f4",
+          "surface-tint": "#006a63",
+          "inverse-on-surface": "#eef0ff",
+          "outline": "#6e7977",
+          "primary-fixed-dim": "#80d5cb",
+          "surface-container": "#eaedff",
+          "background": "#faf8ff",
+          "primary-fixed": "#9cf2e8",
+          "on-primary-fixed": "#00201d",
+          "error-container": "#ffdad6",
+          "on-secondary-fixed-variant": "#224e47"
+        },
+        "borderRadius": {
+          "DEFAULT": "0.25rem",
+          "lg": "0.5rem",
+          "xl": "0.75rem",
+          "full": "9999px"
+        },
+        "spacing": {
+          "space-xs": "0.25rem",
+          "gutter": "1.5rem",
+          "margin": "2rem",
+          "space-2xl": "3rem",
+          "space-lg": "1.5rem",
+          "margin-sm": "1rem",
+          "space-xl": "2rem",
+          "gutter-sm": "1rem",
+          "space-md": "1rem",
+          "space-sm": "0.5rem"
+        },
+        "fontFamily": {
+          "overline": ["Inter"],
+          "body-md": ["Inter"],
+          "display-lg": ["Inter"],
+          "headline-lg": ["Inter"],
+          "label-md": ["Inter"],
+          "headline-md": ["Inter"],
+          "label-sm": ["Inter"],
+          "body-sm": ["Inter"],
+          "headline-xl": ["Inter"],
+          "label-lg": ["Inter"],
+          "headline-sm": ["Inter"],
+          "body-lg": ["Inter"]
+        },
+        "fontSize": {
+          "overline": ["0.6875rem", {"lineHeight": "1rem", "letterSpacing": "0.05em", "fontWeight": "600"}],
+          "body-md": ["0.875rem", {"lineHeight": "1.25rem", "fontWeight": "400"}],
+          "display-lg": ["2.25rem", {"lineHeight": "2.75rem", "letterSpacing": "-0.025em", "fontWeight": "700"}],
+          "headline-lg": ["1.5rem", {"lineHeight": "2rem", "letterSpacing": "-0.015em", "fontWeight": "600"}],
+          "label-md": ["0.875rem", {"lineHeight": "1.25rem", "fontWeight": "500"}],
+          "headline-md": ["1.25rem", {"lineHeight": "1.75rem", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+          "label-sm": ["0.75rem", {"lineHeight": "1rem", "letterSpacing": "0.01em", "fontWeight": "500"}],
+          "body-sm": ["0.75rem", {"lineHeight": "1rem", "fontWeight": "400"}],
+          "headline-xl": ["1.875rem", {"lineHeight": "2.25rem", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+          "label-lg": ["0.875rem", {"lineHeight": "1.25rem", "fontWeight": "600"}],
+          "headline-sm": ["1.125rem", {"lineHeight": "1.5rem", "fontWeight": "600"}],
+          "body-lg": ["1rem", {"lineHeight": "1.5rem", "fontWeight": "400"}]
+        }
+      }
+    }
+  }</script></head><body class="min-h-screen flex flex-col justify-between bg-surface font-body-md text-body-md text-on-surface"><header class="w-full py-space-lg px-margin"><div class="max-w-7xl mx-auto flex items-center justify-between"><a class="flex items-center gap-space-sm" data-path="jobs" href="#"><img alt="Brand logo. - Primary color: #0f766e
+- Font: inter
+- Mode: light
+- Roundness: rounded-md
+" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1Wi_uJrfb1r0ZuobKs16ueTEvLHi54ndM9hHORKIrNLQ8sJDbLowNW6zAFrjp_fUK7Jlb0UsjrLRIjdAwwa4McoLxOmnbY7ZUL_EYyCSGfo_7HT0dLkXg_gMASwRY68OuKsBQHAn86vsrWgcsdYt31vM7U3TpyDfDyU_ZHPfw3u-uBk9iWBNC42PZed27v_xmodtH_t6UXnncFYqHV3hcyCaab7-FnHAfFOtBncrRhD00a8h6bM4sw64PY"/><span class="font-headline-sm text-headline-sm text-primary font-bold tracking-tight">HireHub</span></a><a class="flex items-center gap-space-xs text-on-surface-variant hover:text-on-surface font-label-md text-label-md transition-colors" data-path="jobs" href="#"><span class="material-symbols-outlined text-[18px]">arrow_back</span><span>Back to Jobs</span></a></div></header><main class="flex-1 flex items-center justify-center p-space-md w-full"><div class="flex flex-col w-full items-center justify-center py-space-sm">
+<!-- State Inspector / Interactive Demo Controller -->
+<aside aria-label="Interactive State Inspector" class="w-full max-w-xl mx-auto mb-space-lg px-space-md py-space-sm bg-surface-container rounded-lg shadow-sm flex flex-col sm:flex-row items-center justify-between gap-space-sm">
+<div class="flex items-center gap-space-xs text-on-surface-variant font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[16px] text-primary">tune</span>
+<span class="font-semibold uppercase tracking-wider">State Inspector</span>
+</div>
+<div class="flex flex-wrap items-center justify-center gap-space-xs text-body-sm font-body-sm" id="state-buttons">
+<button class="px-space-sm py-0.5 rounded-full font-label-sm text-label-sm transition-colors bg-primary text-on-primary" id="btn-state-default" onclick="setScreenState('default')" type="button">
+        Default
+      </button>
+<button class="px-space-sm py-0.5 rounded-full font-label-sm text-label-sm transition-colors bg-surface-container-high text-on-surface-variant hover:text-on-surface" id="btn-state-required" onclick="setScreenState('required')" type="button">
+        Required Errors
+      </button>
+<button class="px-space-sm py-0.5 rounded-full font-label-sm text-label-sm transition-colors bg-surface-container-high text-on-surface-variant hover:text-on-surface" id="btn-state-mismatch" onclick="setScreenState('mismatch')" type="button">
+        Password Mismatch
+      </button>
+<button class="px-space-sm py-0.5 rounded-full font-label-sm text-label-sm transition-colors bg-surface-container-high text-on-surface-variant hover:text-on-surface" id="btn-state-duplicate" onclick="setScreenState('duplicate')" type="button">
+        Duplicate Email
+      </button>
+<button class="px-space-sm py-0.5 rounded-full font-label-sm text-label-sm transition-colors bg-surface-container-high text-on-surface-variant hover:text-on-surface" id="btn-state-success" onclick="setScreenState('success')" type="button">
+        Success State
+      </button>
+</div>
+</aside>
+<!-- Main Card Wrapper -->
+<section class="w-full max-w-md mx-auto bg-surface-container-lowest rounded-xl shadow-sm p-space-xl transition-all duration-200">
+<!-- Brand Centered Logo Header -->
+<header class="flex flex-col items-center text-center mb-space-lg">
+<div class="mb-space-sm">
+<img alt="HireHub Logo" class="h-9 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1Wi_uJrfb1r0ZuobKs16ueTEvLHi54ndM9hHORKIrNLQ8sJDbLowNW6zAFrjp_fUK7Jlb0UsjrLRIjdAwwa4McoLxOmnbY7ZUL_EYyCSGfo_7HT0dLkXg_gMASwRY68OuKsBQHAn86vsrWgcsdYt31vM7U3TpyDfDyU_ZHPfw3u-uBk9iWBNC42PZed27v_xmodtH_t6UXnncFYqHV3hcyCaab7-FnHAfFOtBncrRhD00a8h6bM4sw64PY"/>
+</div>
+<h1 class="font-headline-md text-headline-md text-on-surface font-semibold tracking-tight" id="main-heading">
+        Create your HireHub account
+      </h1>
+<p class="font-body-md text-body-md text-on-surface-variant mt-space-xs" id="main-subheading">
+        Start discovering and tracking verified tech opportunities
+      </p>
+</header>
+<!-- Duplicate Email Alert Banner (Default: Hidden) -->
+<div class="hidden mb-space-lg p-space-md rounded-lg bg-error-container text-on-error-container items-start gap-space-sm shadow-sm" id="duplicate-alert" role="alert">
+<span class="material-symbols-outlined text-[20px] text-error shrink-0">error</span>
+<div class="font-body-sm text-body-sm leading-snug">
+<span class="font-semibold block">Email Already Registered</span>
+        An account with this email address already exists. <a class="underline font-medium hover:opacity-80" data-path="login" href="#">Sign in</a> or reset your password.
+      </div>
+</div>
+<!-- Registration Form View -->
+<form class="flex flex-col gap-space-md" id="registration-form" novalidate="" onsubmit="handleFormSubmit(event)">
+<!-- Full Name Field -->
+<div class="flex flex-col gap-space-xs">
+<label class="font-label-md text-label-md text-on-surface font-medium flex items-center justify-between" for="reg-fullname">
+<span>Full Name</span>
+<span class="hidden font-label-sm text-label-sm text-error" id="fullname-error">Name is required</span>
+</label>
+<div class="relative">
+<input class="w-full px-space-md py-space-sm rounded-lg bg-surface-container-lowest text-on-surface placeholder:text-outline font-body-md text-body-md outline-none transition-shadow shadow-sm focus:shadow-md" id="reg-fullname" name="fullName" oninput="checkFieldValidation('reg-fullname')" placeholder="Sarah Jenkins" type="text"/>
+</div>
+</div>
+<!-- Email Address Field -->
+<div class="flex flex-col gap-space-xs">
+<label class="font-label-md text-label-md text-on-surface font-medium flex items-center justify-between" for="reg-email">
+<span>Email Address</span>
+<span class="hidden font-label-sm text-label-sm text-error" id="email-error">Valid email is required</span>
+</label>
+<div class="relative">
+<input class="w-full px-space-md py-space-sm rounded-lg bg-surface-container-lowest text-on-surface placeholder:text-outline font-body-md text-body-md outline-none transition-shadow shadow-sm focus:shadow-md" id="reg-email" name="email" oninput="checkFieldValidation('reg-email')" placeholder="sarah.j@example.com" type="email"/>
+</div>
+</div>
+<!-- Password Field -->
+<div class="flex flex-col gap-space-xs">
+<label class="font-label-md text-label-md text-on-surface font-medium flex items-center justify-between" for="reg-password">
+<span>Password</span>
+<span class="hidden font-label-sm text-label-sm text-error" id="password-error">Password required</span>
+</label>
+<div class="relative">
+<input class="w-full pl-space-md pr-10 py-space-sm rounded-lg bg-surface-container-lowest text-on-surface placeholder:text-outline font-body-md text-body-md outline-none transition-shadow shadow-sm focus:shadow-md" id="reg-password" name="password" oninput="evaluatePasswordRequirements(this.value)" placeholder="Minimum 8 characters" type="password"/>
+<button aria-label="Toggle password visibility" class="absolute right-space-sm top-1/2 -translate-y-1/2 text-on-surface-variant hover:text-on-surface p-1 flex items-center justify-center" onclick="togglePasswordVisibility('reg-password', this)" type="button">
+<span class="material-symbols-outlined text-[18px]">visibility</span>
+</button>
+</div>
+<!-- Password Requirement Helper Checklist -->
+<div class="mt-1 p-space-sm rounded-lg bg-surface-container-low flex flex-col gap-1">
+<div class="flex items-center gap-space-xs text-on-surface-variant font-label-sm text-label-sm transition-colors" id="rule-length">
+<span class="material-symbols-outlined text-[16px] text-outline" id="rule-length-icon">radio_button_unchecked</span>
+<span>At least 8 characters</span>
+</div>
+<div class="flex items-center gap-space-xs text-on-surface-variant font-label-sm text-label-sm transition-colors" id="rule-symbol">
+<span class="material-symbols-outlined text-[16px] text-outline" id="rule-symbol-icon">radio_button_unchecked</span>
+<span>Contains at least 1 number or symbol</span>
+</div>
+</div>
+</div>
+<!-- Confirm Password Field -->
+<div class="flex flex-col gap-space-xs">
+<label class="font-label-md text-label-md text-on-surface font-medium flex items-center justify-between" for="reg-confirm">
+<span>Confirm Password</span>
+<span class="hidden font-label-sm text-label-sm text-error" id="confirm-error">Passwords do not match.</span>
+</label>
+<div class="relative">
+<input class="w-full pl-space-md pr-10 py-space-sm rounded-lg bg-surface-container-lowest text-on-surface placeholder:text-outline font-body-md text-body-md outline-none transition-shadow shadow-sm focus:shadow-md" id="reg-confirm" name="confirmPassword" oninput="checkConfirmPasswordMatch()" placeholder="Re-enter your password" type="password"/>
+<button aria-label="Toggle confirm password visibility" class="absolute right-space-sm top-1/2 -translate-y-1/2 text-on-surface-variant hover:text-on-surface p-1 flex items-center justify-center" onclick="togglePasswordVisibility('reg-confirm', this)" type="button">
+<span class="material-symbols-outlined text-[18px]">visibility</span>
+</button>
+</div>
+</div>
+<!-- Primary Action -->
+<div class="mt-space-sm">
+<button class="w-full py-space-sm px-space-md rounded-lg bg-primary hover:bg-primary-container text-on-primary font-label-lg text-label-lg font-semibold shadow-sm hover:shadow transition-all flex items-center justify-center gap-space-xs" id="btn-submit" type="submit">
+<span>Create Account</span>
+<span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+</div>
+<!-- Footer Subtext -->
+<div class="text-center mt-space-xs font-body-md text-body-md text-on-surface-variant">
+        Already have an account? 
+        <a class="text-primary hover:text-primary-container font-label-md text-label-md font-semibold underline underline-offset-2" data-path="login" href="#">
+          Sign in
+        </a>
+</div>
+</form>
+<!-- Success View (Default: Hidden) -->
+<div class="hidden flex-col items-center text-center py-space-lg" id="success-view">
+<div class="w-16 h-16 rounded-full bg-secondary-container text-secondary flex items-center justify-center mb-space-md shadow-sm">
+<span class="material-symbols-outlined text-[36px]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<h2 class="font-headline-md text-headline-md text-on-surface font-bold tracking-tight mb-space-xs">
+        Account created successfully!
+      </h2>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-xs mb-space-xl">
+        Welcome to HireHub! Redirecting you to sign in to verify your credentials...
+      </p>
+<a class="w-full py-space-sm px-space-md rounded-lg bg-primary hover:bg-primary-container text-on-primary font-label-lg text-label-lg font-semibold shadow-sm hover:shadow transition-all text-center flex items-center justify-center gap-space-xs" data-path="login" href="#">
+<span>Proceed to Sign In</span>
+<span class="material-symbols-outlined text-[18px]">login</span>
+</a>
+</div>
+</section>
+<!-- Job Seeker Security Note -->
+<footer class="mt-space-md text-center max-w-md font-body-sm text-body-sm text-on-surface-variant flex items-center justify-center gap-space-xs">
+<span class="material-symbols-outlined text-[16px] text-primary">verified_user</span>
+<span>Candidate accounts feature instant verified job applications.</span>
+</footer>
+</div>
+<script>
+  function togglePasswordVisibility(inputId, triggerBtn) {
+    const input = document.getElementById(inputId);
+    const icon = triggerBtn.querySelector('.material-symbols-outlined');
+    if (!input) return;
+    if (input.type === 'password') {
+      input.type = 'text';
+      icon.textContent = 'visibility_off';
+    } else {
+      input.type = 'password';
+      icon.textContent = 'visibility';
+    }
+  }
+
+  function evaluatePasswordRequirements(val) {
+    const ruleLen = document.getElementById('rule-length');
+    const iconLen = document.getElementById('rule-length-icon');
+    const ruleSym = document.getElementById('rule-symbol');
+    const iconSym = document.getElementById('rule-symbol-icon');
+
+    const hasMinLength = val.length >= 8;
+    const hasNumOrSymbol = /[0-9!@#$%^&*(),.?":{}|<>]/.test(val);
+
+    if (hasMinLength) {
+      ruleLen.classList.add('text-primary');
+      ruleLen.classList.remove('text-on-surface-variant');
+      iconLen.textContent = 'check_circle';
+      iconLen.classList.add('text-primary');
+      iconLen.classList.remove('text-outline');
+    } else {
+      ruleLen.classList.remove('text-primary');
+      ruleLen.classList.add('text-on-surface-variant');
+      iconLen.textContent = 'radio_button_unchecked';
+      iconLen.classList.remove('text-primary');
+      iconLen.classList.add('text-outline');
+    }
+
+    if (hasNumOrSymbol) {
+      ruleSym.classList.add('text-primary');
+      ruleSym.classList.remove('text-on-surface-variant');
+      iconSym.textContent = 'check_circle';
+      iconSym.classList.add('text-primary');
+      iconSym.classList.remove('text-outline');
+    } else {
+      ruleSym.classList.remove('text-primary');
+      ruleSym.classList.add('text-on-surface-variant');
+      iconSym.textContent = 'radio_button_unchecked';
+      iconSym.classList.remove('text-primary');
+      iconSym.classList.add('text-outline');
+    }
+
+    checkConfirmPasswordMatch();
+  }
+
+  function checkConfirmPasswordMatch() {
+    const pass = document.getElementById('reg-password').value;
+    const confirm = document.getElementById('reg-confirm').value;
+    const confirmInput = document.getElementById('reg-confirm');
+    const confirmError = document.getElementById('confirm-error');
+
+    if (!confirm) {
+      confirmError.classList.add('hidden');
+      confirmInput.classList.remove('bg-error-container', 'text-on-error-container');
+      return;
+    }
+
+    if (pass !== confirm) {
+      confirmError.textContent = "Passwords do not match.";
+      confirmError.classList.remove('hidden');
+      confirmInput.classList.add('bg-error-container');
+    } else {
+      confirmError.classList.add('hidden');
+      confirmInput.classList.remove('bg-error-container');
+    }
+  }
+
+  function checkFieldValidation(fieldId) {
+    const el = document.getElementById(fieldId);
+    if (!el) return;
+    if (el.value.trim() !== '') {
+      el.classList.remove('bg-error-container');
+      if (fieldId === 'reg-fullname') document.getElementById('fullname-error').classList.add('hidden');
+      if (fieldId === 'reg-email') document.getElementById('email-error').classList.add('hidden');
+    }
+  }
+
+  function setScreenState(state) {
+    // Reset buttons
+    const btnIds = ['default', 'required', 'mismatch', 'duplicate', 'success'];
+    btnIds.forEach(id => {
+      const btn = document.getElementById('btn-state-' + id);
+      if (btn) {
+        btn.classList.remove('bg-primary', 'text-on-primary');
+        btn.classList.add('bg-surface-container-high', 'text-on-surface-variant');
+      }
+    });
+
+    const activeBtn = document.getElementById('btn-state-' + state);
+    if (activeBtn) {
+      activeBtn.classList.add('bg-primary', 'text-on-primary');
+      activeBtn.classList.remove('bg-surface-container-high', 'text-on-surface-variant');
+    }
+
+    const form = document.getElementById('registration-form');
+    const successView = document.getElementById('success-view');
+    const duplicateAlert = document.getElementById('duplicate-alert');
+    const mainHeading = document.getElementById('main-heading');
+    const mainSubheading = document.getElementById('main-subheading');
+
+    const fn = document.getElementById('reg-fullname');
+    const em = document.getElementById('reg-email');
+    const pw = document.getElementById('reg-password');
+    const cp = document.getElementById('reg-confirm');
+
+    const fnErr = document.getElementById('fullname-error');
+    const emErr = document.getElementById('email-error');
+    const pwErr = document.getElementById('password-error');
+    const cpErr = document.getElementById('confirm-error');
+
+    // Reset components to base state
+    form.classList.remove('hidden');
+    successView.classList.add('hidden');
+    duplicateAlert.classList.add('hidden');
+    duplicateAlert.classList.remove('flex');
+    mainHeading.classList.remove('hidden');
+    mainSubheading.classList.remove('hidden');
+
+    [fn, em, pw, cp].forEach(inp => {
+      if (inp) inp.classList.remove('bg-error-container');
+    });
+    [fnErr, emErr, pwErr, cpErr].forEach(e => {
+      if (e) e.classList.add('hidden');
+    });
+
+    if (state === 'default') {
+      fn.value = '';
+      em.value = '';
+      pw.value = '';
+      cp.value = '';
+      evaluatePasswordRequirements('');
+    } else if (state === 'required') {
+      fn.value = '';
+      em.value = '';
+      pw.value = '';
+      cp.value = '';
+      fn.classList.add('bg-error-container');
+      em.classList.add('bg-error-container');
+      pw.classList.add('bg-error-container');
+      fnErr.classList.remove('hidden');
+      emErr.classList.remove('hidden');
+      pwErr.classList.remove('hidden');
+    } else if (state === 'mismatch') {
+      fn.value = 'Sarah Jenkins';
+      em.value = 'sarah.j@example.com';
+      pw.value = 'SecurePass123!';
+      cp.value = 'DifferentPass999!';
+      evaluatePasswordRequirements('SecurePass123!');
+      cp.classList.add('bg-error-container');
+      cpErr.textContent = 'Passwords do not match.';
+      cpErr.classList.remove('hidden');
+    } else if (state === 'duplicate') {
+      fn.value = 'Sarah Jenkins';
+      em.value = 'sarah.j@example.com';
+      pw.value = 'SecurePass123!';
+      cp.value = 'SecurePass123!';
+      evaluatePasswordRequirements('SecurePass123!');
+      duplicateAlert.classList.remove('hidden');
+      duplicateAlert.classList.add('flex');
+    } else if (state === 'success') {
+      form.classList.add('hidden');
+      mainHeading.classList.add('hidden');
+      mainSubheading.classList.add('hidden');
+      successView.classList.remove('hidden');
+      successView.classList.add('flex');
+    }
+  }
+
+  function handleFormSubmit(e) {
+    e.preventDefault();
+    const fn = document.getElementById('reg-fullname').value.trim();
+    const em = document.getElementById('reg-email').value.trim();
+    const pw = document.getElementById('reg-password').value;
+    const cp = document.getElementById('reg-confirm').value;
+
+    if (!fn || !em || !pw) {
+      setScreenState('required');
+      return;
+    }
+
+    if (pw !== cp) {
+      setScreenState('mismatch');
+      return;
+    }
+
+    if (em.toLowerCase() === 'sarah.j@example.com') {
+      setScreenState('duplicate');
+      return;
+    }
+
+    setScreenState('success');
+  }
+</script></main><footer class="w-full py-space-lg px-margin text-center"><div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-space-sm text-on-surface-variant font-body-sm text-body-sm"><span>© 2024 HireHub. Secure authentication gateway.</span><div class="flex gap-space-md"><a class="hover:text-on-surface transition-colors" data-path="privacy-policy" href="#">Privacy</a><a class="hover:text-on-surface transition-colors" data-path="terms-of-service" href="#">Terms</a><a class="hover:text-on-surface transition-colors" data-path="support" href="#">Help Center</a></div></div></footer></body></html>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Manage Jobs — HireHub Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <aside id="sidebar"></aside>
+  <div class="admin-main">
+    <div id="topbar"></div>
+    <main class="admin-content" style="padding-top:96px">
+      <div id="alertBox"></div>
+      <div id="content"><div class="loading">Loading jobs…</div></div>
+    </main>
+  </div>
+
+  <!-- Post / Edit Job Modal -->
+  <div class="modal-backdrop" id="jobModal" style="display:none">
+    <div class="modal">
+      <div class="modal-head">
+        <div class="t">
+          <span class="m-ico"><span class="msi">post_add</span></span>
+          <div>
+            <h2 id="modalTitle">Post New Job</h2>
+            <p>Configure requisition details and publishing channels.</p>
+          </div>
+        </div>
+        <button class="icon-btn" id="modalClose" aria-label="Close modal"><span class="msi">close</span></button>
+      </div>
+      <div class="modal-body">
+        <div id="modalAlert"></div>
+        <form id="jobForm" style="display:flex;flex-direction:column;gap:16px">
+          <input type="hidden" id="jobId" />
+          <div class="field">
+            <label for="jTitle">Job Title <span style="color:var(--error)">*</span></label>
+            <input class="input fill" id="jTitle" maxlength="150" required placeholder="e.g. Senior Frontend Engineer" />
+          </div>
+          <div class="form-grid cols-2">
+            <div class="field">
+              <label for="jCompany">Company / Client <span style="color:var(--error)">*</span></label>
+              <input class="input fill" id="jCompany" maxlength="150" required placeholder="e.g. Acme Technologies" />
+            </div>
+            <div class="field">
+              <label for="jLocation">Location <span style="color:var(--error)">*</span></label>
+              <input class="input fill" id="jLocation" maxlength="150" required placeholder="e.g. Chennai, India (Hybrid)" />
+            </div>
+          </div>
+          <div class="form-grid cols-2">
+            <div class="field">
+              <label for="jType">Job Type <span style="color:var(--error)">*</span></label>
+              <div class="select-wrap" style="width:100%">
+                <select class="input fill" id="jType" required>
+                  <option>Full-time</option>
+                  <option>Part-time</option>
+                  <option>Contract</option>
+                  <option>Internship</option>
+                  <option>Temporary</option>
+                  <option>Remote</option>
+                </select>
+                <span class="msi chev">expand_more</span>
+              </div>
+            </div>
+            <div class="field">
+              <label for="jSalary">Salary Range (Annual)</label>
+              <input class="input fill" id="jSalary" maxlength="100" placeholder="e.g. ₹8–12 LPA" />
+            </div>
+          </div>
+          <div class="field">
+            <label for="jDescription">Requisition Description <span style="color:var(--error)">*</span></label>
+            <textarea class="input fill" id="jDescription" maxlength="5000" required rows="4"
+              placeholder="Outline core responsibilities, qualifications, and expectations…"></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-foot">
+        <button class="btn btn-secondary" id="modalCancel">Cancel</button>
+        <button class="btn btn-primary" id="modalSubmit" form="jobForm" type="submit">Post Requisition</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete confirmation modal -->
+  <div class="modal-backdrop center" id="deleteModal" style="display:none">
+    <div class="modal sm delete-modal">
+      <div class="warn-ico"><span class="msi">warning</span></div>
+      <h3>Delete Job Requisition?</h3>
+      <p>
+        Are you sure you want to delete <b id="deleteTargetJob" style="color:var(--ink)">""</b>?
+        All related applications will be removed as well. This action cannot be undone.
+      </p>
+      <div class="row">
+        <button class="btn btn-secondary" id="deleteCancel">Cancel</button>
+        <button class="btn btn-danger" id="deleteConfirm">Delete Requisition</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/ui.js"></script>
+  <script src="/js/manage-jobs.js"></script>
+</body>
+</html>

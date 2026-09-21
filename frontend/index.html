@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Find your next opportunity — HireHub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body data-page="jobs">
+  <div id="navbar"></div>
+
+  <main class="pub-main">
+    <div class="pub-container">
+      <!-- Intro + search ribbon -->
+      <section>
+        <div style="display:flex;flex-direction:column;gap:16px;margin-bottom:16px" class="intro-row">
+          <div>
+            <span class="overline" style="color:var(--primary);font-weight:600;letter-spacing:0.08em">Opportunities Directory</span>
+            <h1 class="headline-xl" style="margin-top:4px">Find your next opportunity</h1>
+            <p class="muted" style="margin-top:4px">Discover verified roles matched directly with your skills, target salary, and career growth.</p>
+          </div>
+          <div class="d-only" id="verifiedStrip" style="display:none;align-items:center;gap:8px;font-size:0.75rem;color:var(--ink-3);background:var(--surface-2);padding:4px 16px;border-radius:var(--r-ctl);border:1px solid rgba(189,201,198,0.3)">
+            <span class="msi" style="font-size:16px;color:var(--primary)">verified_user</span>
+            <span id="verifiedCount">Live vacancies from verified employers</span>
+          </div>
+        </div>
+
+        <form id="filters" class="search-ribbon">
+          <div class="field-box">
+            <span class="msi">search</span>
+            <input id="fSearch" type="text" placeholder="Job title, keyword, or company" aria-label="Search jobs" />
+          </div>
+          <div class="divider-v"></div>
+          <div class="field-box" style="flex:0 0 auto;width:100%" id="locBox">
+            <span class="msi">location_on</span>
+            <input id="fLocation" type="text" placeholder="Location (e.g. Chennai, Remote, Bengaluru)" aria-label="Location" />
+          </div>
+          <button type="submit" class="btn btn-primary" id="searchBtn">
+            <span class="msi">search</span><span>Search</span>
+          </button>
+        </form>
+        <div class="trending" id="trending">
+          <span class="lbl">Trending:</span>
+          <button type="button" data-q="Developer">Developer</button>
+          <button type="button" data-q="Designer">Designer</button>
+          <button type="button" data-q="QA">QA</button>
+          <button type="button" data-q="Manager">Manager</button>
+        </div>
+      </section>
+
+      <!-- Two-column workspace -->
+      <div class="jobs-layout">
+        <!-- Filters sidebar -->
+        <aside class="filters-panel" id="filterPanel">
+          <div class="filters-head">
+            <div class="title">
+              <span class="msi">tune</span>
+              <h2>Filters</h2>
+            </div>
+            <button type="button" class="clear" id="clearFilters">Clear all</button>
+          </div>
+          <div class="filter-sec">
+            <h3>Job Type</h3>
+            <div class="opts" id="typeOpts"></div>
+          </div>
+          <div class="tip-widget">
+            <span class="msi">lightbulb</span>
+            <div>
+              <p class="t">HireHub Tip</p>
+              <p class="d">Use the search ribbon above to find roles fast — filters refine the results live.</p>
+            </div>
+          </div>
+        </aside>
+
+        <!-- Results feed -->
+        <section class="results-col">
+          <div class="results-meta">
+            <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+              <span class="found" id="foundCount">0 jobs found</span>
+              <span class="dotsep"></span>
+              <span class="muted small" id="pageInfo">Showing page 1 of 1</span>
+            </div>
+          </div>
+
+          <div id="alertBox"></div>
+          <div id="jobsList" style="display:flex;flex-direction:column;gap:16px">
+            <div class="loading">Loading jobs…</div>
+          </div>
+
+          <nav class="pager" id="pager" style="display:none" aria-label="Pagination"></nav>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <div id="footer"></div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/ui.js"></script>
+  <script src="/js/jobs.js"></script>
+</body>
+</html>

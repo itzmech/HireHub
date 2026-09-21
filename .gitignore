@@ -1,0 +1,28 @@
+# Dependencies
+node_modules/
+
+# Environment / secrets - NEVER commit these
+.env
+.env.local
+.env.production
+
+# Database files
+*.db
+*.db-journal
+*.sqlite
+*.sqlite3
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Freebuff app state
+.freebuff/
+# SQLite sidecar files
+*.db-shm
+*.db-wal
+*.db-journal

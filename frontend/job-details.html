@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Job Details — HireHub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body data-page="jobs">
+  <div id="navbar"></div>
+
+  <main class="pub-main">
+    <!-- Breadcrumb bar -->
+    <section style="background:var(--surface);border-bottom:1px solid rgba(189,201,198,0.3)">
+      <div style="max-width:1280px;margin:0 auto;padding:10px 32px;display:flex;align-items:center;justify-content:space-between;gap:12px" id="crumbBar">
+        <nav aria-label="Breadcrumb" style="display:flex;align-items:center;gap:6px;min-width:0" class="muted small">
+          <a href="/index.html" style="display:inline-flex;align-items:center;gap:4px;font-weight:500"><span class="msi" style="font-size:16px">arrow_back</span>Jobs</a>
+          <span style="color:#cbd5e1">/</span>
+          <span id="crumbCompany" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">…</span>
+          <span style="color:#cbd5e1">/</span>
+          <span id="crumbTitle" style="color:var(--ink);font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">…</span>
+        </nav>
+        <a class="btn btn-secondary btn-sm" href="/index.html"><span class="msi" style="font-size:16px">arrow_back</span><span>Back</span></a>
+      </div>
+    </section>
+
+    <div class="pub-container">
+      <div id="alertBox"></div>
+      <div id="jobBox"><div class="loading">Loading job…</div></div>
+    </div>
+  </main>
+
+  <!-- Success modal (Stitch: Application Submitted!) -->
+  <div class="modal-backdrop center" id="successModal" style="display:none">
+    <div class="modal sm" style="text-align:center;padding:32px">
+      <div style="width:56px;height:56px;border-radius:9999px;margin:0 auto 16px;background:#bdece2;display:flex;align-items:center;justify-content:center">
+        <span class="msi" style="font-size:32px;color:#224e47">check_circle</span>
+      </div>
+      <h3 class="headline-md" style="margin-bottom:4px">Application Submitted!</h3>
+      <p class="muted" id="successCopy" style="margin-bottom:16px">Your application has been routed to the hiring team.</p>
+      <div class="kv-note" style="text-align:left;flex-direction:column;gap:2px;margin-bottom:16px">
+        <p><b id="successRef">Application Reference: —</b></p>
+        <p>Track status in real-time under <a href="/applications.html">My Applications</a>.</p>
+      </div>
+      <button class="btn btn-primary btn-block" id="closeSuccess">Return to Jobs</button>
+    </div>
+  </div>
+
+  <div id="footer"></div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/ui.js"></script>
+  <script src="/js/job-details.js"></script>
+</body>
+</html>

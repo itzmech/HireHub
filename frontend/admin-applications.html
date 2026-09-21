@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Applications — HireHub Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <aside id="sidebar"></aside>
+  <div class="admin-main">
+    <div id="topbar"></div>
+    <main class="admin-content" style="padding-top:96px">
+      <div id="alertBox"></div>
+      <div id="content"><div class="loading">Loading applications…</div></div>
+    </main>
+  </div>
+
+  <!-- Triage drawer -->
+  <div class="drawer-backdrop" id="drawerBackdrop"></div>
+  <div class="drawer" id="drawerPanel" role="dialog" aria-modal="true" aria-label="Application triage">
+    <div class="drawer-body">
+      <div class="drawer-head">
+        <div style="display:flex;align-items:center;gap:12px">
+          <span style="width:32px;height:32px;border-radius:var(--r-ctl);background:#bdece2;color:#224e47;display:inline-flex;align-items:center;justify-content:center">
+            <span class="msi">how_to_reg</span>
+          </span>
+          <div>
+            <h3 class="headline-sm">Application Triage</h3>
+            <span class="small muted">HireHub Fast Decision Workflow</span>
+          </div>
+        </div>
+        <button class="icon-btn" id="drawerClose" aria-label="Close drawer"><span class="msi">close</span></button>
+      </div>
+
+      <div style="background:var(--surface-2);border-radius:var(--r-xl);padding:16px;display:flex;align-items:center;gap:16px">
+        <span class="avatar-initials" id="drawerInitials" style="width:56px;height:56px;background:var(--primary-soft);color:var(--primary);font-size:1.125rem"></span>
+        <div style="min-width:0">
+          <h4 class="headline-sm" id="drawerName" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis"></h4>
+          <span class="semibold" id="drawerRole" style="color:var(--primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block"></span>
+          <span class="small muted" style="display:flex;align-items:center;gap:4px;margin-top:2px">
+            <span class="msi" style="font-size:14px">apartment</span><span id="drawerCompany"></span>
+          </span>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:4px">
+        <label class="overline" style="font-weight:600">Candidate Cover &amp; Note Excerpt</label>
+        <div style="background:var(--canvas);border:1px solid var(--border);border-radius:var(--r-xl);padding:16px">
+          <p id="drawerNote" class="medium" style="font-style:italic;color:var(--ink-2)"></p>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <label class="overline" style="font-weight:600">Triage Decision</label>
+        <div class="decision-grid" id="decisionButtons"></div>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:8px;padding:12px;border-radius:var(--r-ctl);background:var(--surface-2)" class="small muted">
+        <span class="msi" style="font-size:18px;color:var(--primary)">notifications_active</span>
+        <span>The applicant's status in <b style="color:var(--ink)">My Applications</b> updates immediately.</span>
+      </div>
+    </div>
+    <div class="drawer-foot">
+      <button class="btn btn-secondary" id="drawerCancel">Cancel</button>
+      <button class="btn btn-primary" id="drawerSave">
+        <span class="msi">check_circle</span><span>Confirm &amp; Update Status</span>
+      </button>
+    </div>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/ui.js"></script>
+  <script src="/js/admin-applications.js"></script>
+</body>
+</html>

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign in — HireHub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <div class="auth-shell">
+    <header class="auth-header">
+      <div class="inner">
+        <a class="brand" href="/index.html"><span id="headerMark"></span><span class="headline-sm" style="font-weight:700;color:var(--primary);letter-spacing:-0.02em">HireHub</span></a>
+        <a class="back" href="/index.html"><span class="msi">arrow_back</span><span>Back to Jobs</span></a>
+      </div>
+    </header>
+
+    <main class="auth-main">
+      <div class="auth-card">
+        <div class="auth-brand">
+          <span id="cardMark"></span>
+          <h1>Welcome back</h1>
+          <p>Sign in to your HireHub account to continue</p>
+        </div>
+
+        <div id="alertBox"></div>
+
+        <form id="loginForm" style="display:flex;flex-direction:column;gap:16px" novalidate>
+          <div class="field" id="emailField">
+            <label for="email">Email Address</label>
+            <div class="input-icon">
+              <span class="msi">mail</span>
+              <input class="input" id="email" type="email" autocomplete="email" placeholder="alex.morgan@example.com" />
+            </div>
+            <span class="err"><span class="msi" style="font-size:16px">info</span>Please enter a valid email address.</span>
+          </div>
+
+          <div class="field">
+            <label for="password">Password</label>
+            <div class="input-icon">
+              <span class="msi">lock</span>
+              <input class="input" id="password" type="password" autocomplete="current-password" placeholder="••••••••" />
+              <button type="button" class="trail" id="togglePw" aria-label="Toggle password visibility">
+                <span class="msi">visibility</span>
+              </button>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary" id="loginBtn" style="height:44px">
+            <span class="msi" id="loginIcon">login</span><span id="loginText">Sign In</span>
+          </button>
+        </form>
+
+        <div class="auth-divider">
+          <span class="line"></span>
+          <span>Recruitment Cloud</span>
+          <span class="line"></span>
+        </div>
+
+        <p class="auth-alt">
+          Don't have an account? <a href="/register.html">Create an account</a>
+        </p>
+
+        <div class="auth-secure">
+          <span class="msi">lock</span>
+          <span>256-Bit TLS End-to-End Encryption</span>
+        </div>
+      </div>
+    </main>
+
+    <footer class="auth-foot">
+      <div class="inner">
+        <span>© 2026 HireHub. Secure authentication gateway.</span>
+        <span style="display:flex;gap:16px">
+          <a href="/index.html">Privacy</a>
+          <a href="/index.html">Terms</a>
+          <a href="/index.html">Help Center</a>
+        </span>
+      </div>
+    </footer>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/ui.js"></script>
+  <script src="/js/login.js"></script>
+</body>
+</html>
