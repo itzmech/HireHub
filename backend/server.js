@@ -50,6 +50,33 @@ app.get('/api/health', (req, res) => {
   res.json({ success: true, data: { status: 'ok', uptime: process.uptime() } });
 });
 
+// Deployment/database diagnostics: confirms the API is live, the SQLite schema
+// initialized, and SELECT/INSERT round-trips work in the current runtime.
+app.get('/api/health/db', (req, res) => {
+  try {
+    const db = require('./database/db');
+    db.run(
+      "INSERT INTO jobs (title, company, location, type, salary, description) VALUES ('__healthcheck__', '__healthcheck__', '__healthcheck__', 'Full-time', NULL, 'Temporary diagnostic row; deleted immediately.')"
+    );
+    const row = db.get("SELECT COUNT(*) AS n FROM jobs WHERE title = '__healthcheck__'");
+    db.run("DELETE FROM jobs WHERE title = '__healthcheck__'");
+    res.json({
+      success: true,
+      data: {
+        status: 'ok',
+        database: 'sqlite',
+        writable: row.n === 1,
+        userCount: db.get('SELECT COUNT(*) AS n FROM users').n,
+        jobCount: db.get('SELECT COUNT(*) AS n FROM jobs').n,
+        persistent: !process.env.VERCEL,
+      },
+    });
+  } catch (err) {
+    console.error('[health/db]', err.code || '', err.message);
+    res.status(503).json({ success: false, message: `Database unavailable: ${err.code || err.message}` });
+  }
+});
+
 // ---- Static frontend ----------------------------------------------------
 const FRONTEND_DIR = path.join(__dirname, '..', 'frontend');
 app.use(express.static(FRONTEND_DIR, { extensions: ['html'] }));

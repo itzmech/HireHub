@@ -4,14 +4,30 @@ const jwt = require('jsonwebtoken');
 
 const { fail } = require('../utils/helpers');
 
-const JWT_SECRET = process.env.JWT_SECRET;
-
-if (!JWT_SECRET) {
-  console.error('FATAL: JWT_SECRET environment variable is required. See .env.example');
-  process.exit(1);
-}
-
+// NOTE: JWT_SECRET is read lazily (at request time, via jwtSecret()). It must
+// never be required at module-load time: on serverless platforms a missing
+// secret must produce a clear JSON error — not a module-load crash that makes
+// every API route fail with an opaque 500.
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '8h';
+
+/**
+ * Resolve the JWT secret at request time.
+ * On Vercel, env vars are present but `dotenv` must not be relied on, so
+ * secret resolution is strict: without a configured secret the API reports a
+ * misconfiguration (503) instead of crashing the runtime (500).
+ */
+function jwtSecret() {
+  const secret = process.env.JWT_SECRET;
+  if (!secret) {
+    const err = new Error(
+      'JWT_SECRET is not configured. Set it in the environment (Vercel: Project Settings → Environment Variables) and redeploy.'
+    );
+    err.status = 503;
+    err.expose = true;
+    throw err;
+  }
+  return secret;
+}
 
 /** Verify the Bearer token, attach req.user = { id, role, email }. */
 function authenticateToken(req, res, next) {
@@ -23,7 +39,7 @@ function authenticateToken(req, res, next) {
   }
 
   try {
-    const payload = jwt.verify(token, JWT_SECRET, { algorithms: ['HS256'] });
+    const payload = jwt.verify(token, jwtSecret(), { algorithms: ['HS256'] });
     if (!payload || typeof payload.id !== 'number' || !payload.role) {
       return fail(res, 'Invalid token payload.', 401);
     }
@@ -56,7 +72,7 @@ function requireUser(req, res, next) {
 function signToken(user) {
   return jwt.sign(
     { id: user.id, email: user.email, role: user.role },
-    JWT_SECRET,
+    jwtSecret(),
     { expiresIn: JWT_EXPIRES_IN, algorithm: 'HS256' }
   );
 }
