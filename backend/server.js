@@ -47,7 +47,16 @@ app.use('/api/applications', applicationsRoutes);
 app.use('/api/users', usersRoutes); // includes /api/users/stats
 
 app.get('/api/health', (req, res) => {
-  res.json({ success: true, data: { status: 'ok', uptime: process.uptime() } });
+  res.json({
+    success: true,
+    data: {
+      status: 'ok',
+      uptime: process.uptime(),
+      node: process.version,
+      vercel: Boolean(process.env.VERCEL),
+      jwtSecretConfigured: Boolean(process.env.JWT_SECRET),
+    },
+  });
 });
 
 // Deployment/database diagnostics: confirms the API is live, the SQLite schema
