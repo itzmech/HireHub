@@ -18,23 +18,48 @@ app.disable('x-powered-by');
 app.set('trust proxy', 1);
 
 // ---- CORS ---------------------------------------------------------------
-// Allowed origins come from CORS_ORIGINS (comma-separated). In development,
-// any localhost/127.0.0.1 origin is permitted for convenience.
-const allowedOrigins = (process.env.CORS_ORIGINS || '')
-  .split(',')
-  .map((o) => o.trim())
-  .filter(Boolean);
+// Explicit origin allow-list — never a wildcard (this API uses credentialed
+// responses). Allowed origins:
+//   - CORS_ORIGINS (comma-separated) for self-hosted frontends
+//   - localhost / 127.0.0.1 (any port) for local development
+//   - On Vercel: this deployment's own origin, built from Vercel's system
+//     environment variables. The frontend and API share one origin on
+//     Vercel, so same-origin browser requests (which still send an Origin
+//     header) must be allowed. VERCEL_URL covers every preview deployment;
+//     VERCEL_PROJECT_PRODUCTION_URL and VERCEL_BRANCH_URL cover the stable
+//     production and branch domains. No arbitrary origins are accepted.
+const toOriginList = (value) =>
+  String(value || '')
+    .split(',')
+    .map((o) => o.trim().replace(/\/+$/, ''))
+    .filter(Boolean);
+
+const allowedOrigins = new Set(toOriginList(process.env.CORS_ORIGINS));
+
+for (const v of [
+  process.env.VERCEL_URL,
+  process.env.VERCEL_PROJECT_PRODUCTION_URL,
+  process.env.VERCEL_BRANCH_URL,
+]) {
+  if (!v) continue;
+  allowedOrigins.add(v.startsWith('http') ? v.replace(/\/+$/, '') : `https://${v.replace(/\/+$/, '')}`);
+}
 
 const corsOptions = {
   origin(origin, callback) {
     if (!origin) return callback(null, true); // curl / same-origin
-    if (allowedOrigins.includes(origin)) return callback(null, true);
+    if (allowedOrigins.has(origin)) return callback(null, true);
     if (/^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin)) return callback(null, true);
-    return callback(new Error('Not allowed by CORS'));
+    // Deliberate rejection: explicit 403 naming the origin (never a fake 200,
+    // never an opaque 500). The central error handler honors err.status.
+    const err = new Error(`Origin not allowed by CORS: ${origin}`);
+    err.status = 403;
+    err.expose = true;
+    return callback(err);
   },
   credentials: true,
 };
-app.use(cors(corsOptions));
+app.use(cors(corsOptions)); // mounted before all API routes; handles OPTIONS preflights
 
 // ---- Body parsing -------------------------------------------------------
 app.use(express.json({ limit: '100kb' }));
