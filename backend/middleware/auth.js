@@ -10,15 +10,24 @@ const { fail } = require('../utils/helpers');
 // every API route fail with an opaque 500.
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '8h';
 
+// Ephemeral per-instance fallback secret, generated once per cold boot when
+// JWT_SECRET is not configured (e.g. hosting plans without env-var support).
+// Security properties: never hard-coded, never committed, never logged, unique
+// per instance. Trade-off (inherent to any secretless deployment): tokens do
+// not survive a cold start, so all users must log in again when an instance
+// restarts. Setting JWT_SECRET in the environment always takes precedence and
+// restores stable tokens.
+const EPHEMERAL_SECRET = require('crypto').randomBytes(48).toString('hex');
+
 /**
  * Resolve the JWT secret at request time.
- * On Vercel, env vars are present but `dotenv` must not be relied on, so
- * secret resolution is strict: without a configured secret the API reports a
- * misconfiguration (503) instead of crashing the runtime (500).
+ * Order: process.env.JWT_SECRET → per-instance ephemeral random secret.
+ * On serverless platforms a missing secret must never crash the runtime.
  */
 function jwtSecret() {
   const secret = process.env.JWT_SECRET;
-  if (!secret) {
+  if (secret) return secret;
+  if (process.env.JWT_ALLOW_EPHEMERAL === '0') {
     const err = new Error(
       'JWT_SECRET is not configured. Set it in the environment (Vercel: Project Settings → Environment Variables) and redeploy.'
     );
@@ -26,7 +35,7 @@ function jwtSecret() {
     err.expose = true;
     throw err;
   }
-  return secret;
+  return EPHEMERAL_SECRET;
 }
 
 /** Verify the Bearer token, attach req.user = { id, role, email }. */

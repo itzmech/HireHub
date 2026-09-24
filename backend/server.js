@@ -80,6 +80,7 @@ app.get('/api/health', (req, res) => {
       node: process.version,
       vercel: Boolean(process.env.VERCEL),
       jwtSecretConfigured: Boolean(process.env.JWT_SECRET),
+      jwtMode: process.env.JWT_SECRET ? 'env' : 'ephemeral-per-instance',
     },
   });
 });

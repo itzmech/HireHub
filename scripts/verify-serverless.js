@@ -32,7 +32,7 @@ const PORT = Number(process.env.PORT) || 3199;
 process.chdir(os.tmpdir());
 process.env.VERCEL = '1';
 process.env.DB_PATH = path.join(fs.mkdtempSync(path.join(os.tmpdir(), 'hirehub-verify-')), 'verify.db');
-if (mode === 'probe-no-secret') delete process.env.JWT_SECRET;
+if (mode === 'probe-no-secret' || process.env.EPHEMERAL_JWT === '1') delete process.env.JWT_SECRET;
 else process.env.JWT_SECRET = process.env.JWT_SECRET || 'verification-secret-not-for-production';
 
 // Load the exact entry point Vercel executes (includes the cold-boot seed).
@@ -85,30 +85,38 @@ async function main() {
   }
 
   if (mode === 'probe-no-secret') {
-    // The exact reported production failure state: static pages fine, APIs 500.
+    // Production state with no JWT_SECRET on a plan without env vars:
+    // auth must work via the per-instance ephemeral fallback secret.
     const health = await req('GET', '/api/health');
     ok('GET /api/health -> 200 (no boot crash)', health.status === 200, `got ${health.status}`);
+    ok(
+      'health reports ephemeral JWT mode',
+      /"jwtMode":"ephemeral-per-instance"/.test(health.body),
+      health.body.slice(0, 200)
+    );
 
     const jobs = await req('GET', '/api/jobs');
     ok('GET /api/jobs -> 200 (SQLite schema initialized)', jobs.status === 200, `got ${jobs.status}`);
 
+    const email = `probe-${Date.now()}@example.com`;
     const reg = await req('POST', '/api/auth/register', {
       name: 'Probe User',
-      email: 'probe@example.com',
+      email,
       password: 'Password1!',
     });
-    ok('POST /api/auth/register -> 503 (was 500 crash)', reg.status === 503, `got ${reg.status}`);
-    ok(
-      'register error names the misconfiguration',
-      /JWT_SECRET/i.test(reg.body),
-      reg.body.slice(0, 120)
-    );
+    ok('POST /api/auth/register -> 201 (ephemeral secret signs token)', reg.status === 201, `got ${reg.status} ${reg.body.slice(0, 120)}`);
+    const regToken = /"token":"([^"]+)"/.exec(reg.body);
+    ok('register returns a JWT', Boolean(regToken), reg.body.slice(0, 120));
 
-    // Unknown user: bcrypt lookup fails before JWT_SECRET is needed, so a
-    // clean 401 (not 500) is the correct expected behavior here. The 503
-    // misconfiguration path is already proven via register above.
-    const login = await req('POST', '/api/auth/login', { email: 'probe@example.com', password: 'x' });
-    ok('POST /api/auth/login reachable -> 401 unknown user (not 500)', login.status === 401, `got ${login.status}`);
+    // Same warm instance: the signed token must verify against the fallback secret.
+    const mine = await req('GET', '/api/applications/mine', null, regToken ? regToken[1] : undefined);
+    ok('registered token authenticates on protected route', mine.status === 200, `got ${mine.status} ${mine.body.slice(0, 120)}`);
+
+    const login = await req('POST', '/api/auth/login', { email, password: 'Password1!' });
+    ok('POST /api/auth/login -> 200 on warm instance', login.status === 200, `got ${login.status} ${login.body.slice(0, 120)}`);
+
+    const badLogin = await req('POST', '/api/auth/login', { email, password: 'wrong' });
+    ok('wrong password still rejected -> 401 (not 500)', badLogin.status === 401, `got ${badLogin.status}`);
 
     const noAuth = await req('GET', '/api/applications/mine');
     ok('protected route without token -> 401', noAuth.status === 401, `got ${noAuth.status}`);
