@@ -60,24 +60,17 @@ function overviewBar(counts, total) {
 
 function filterTabs(counts) {
   const tab = (key, label, n) => `
-    <button class="filter-tab" data-filter="${key}" style="${mineState.filter === key ? activeTabStyle() : idleTabStyle()}">
-      ${label} <span class="tab-count" style="${mineState.filter === key ? 'background:var(--primary);color:#fff' : ''}">${n}</span>
+    <button class="filter-tab ${mineState.filter === key ? 'ft-active' : ''}" data-filter="${key}">
+      ${label} <span class="tab-count">${n}</span>
     </button>`;
   return `
-    <div style="display:flex;align-items:center;gap:4px;overflow-x:auto" id="filterTabs">
+    <div class="tabs-row" id="filterTabs">
       ${tab('all', 'All', mineAll.length)}
       ${tab('Pending', 'Pending', counts.Pending)}
       ${tab('Shortlisted', 'Shortlisted', counts.Shortlisted)}
       ${tab('Hired', 'Hired', counts.Hired)}
       ${tab('Rejected', 'Rejected', counts.Rejected)}
     </div>`;
-}
-
-function activeTabStyle() {
-  return 'background:var(--primary-soft);color:var(--primary)';
-}
-function idleTabStyle() {
-  return 'background:transparent;color:var(--ink-3)';
 }
 
 function applicationsTable(list) {
@@ -162,7 +155,7 @@ function rerenderTable() {
 
   const tabsWrap = document.getElementById('filterTabs');
   if (tabsWrap) {
-    tabsWrap.outerHTML = `<div id="filterTabs" style="display:flex;align-items:center;gap:4px;overflow-x:auto">${filterTabs(counts)}</div>`;
+    tabsWrap.outerHTML = `<div class="tabs-row" id="filterTabs">${filterTabs(counts)}</div>`;
     bindTabs();
   }
   document.getElementById('tableZone').innerHTML = applicationsTable(visibleRows());
@@ -212,7 +205,7 @@ async function loadMine() {
       <div class="card" style="margin-top:16px">
         <div style="padding:14px 24px;border-bottom:1px solid var(--border);display:flex;flex-direction:column;gap:12px" id="toolbar">
           <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
-            <div id="filterTabs" style="display:flex;align-items:center;gap:4px;overflow-x:auto">${filterTabs(counts)}</div>
+            <div id="filterTabs" class="tabs-row">${filterTabs(counts)}</div>
             <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
               <div class="input-icon" style="width:240px;max-width:100%">
                 <span class="msi">search</span>

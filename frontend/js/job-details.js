@@ -22,6 +22,23 @@ function renderJob(job, appliedState) {
   document.getElementById('crumbTitle').textContent = job.title;
   document.title = `${job.title} — HireHub`;
 
+  // Mobile sticky apply bar: show only for logged-in candidates who can apply.
+  const mBar = document.getElementById('mobileApplyBar');
+  const mLabel = document.getElementById('mobileApplyLabel');
+  const showBar = Boolean(loggedIn && !isAdmin && !applied);
+  mBar.style.display = 'none';
+  document.body.classList.remove('has-apply-bar');
+  if (showBar) {
+    mBar.style.display = 'block';
+    document.body.classList.add('has-apply-bar');
+    document.getElementById('mobileApplyLink').onclick = (e) => {
+      e.preventDefault();
+      const aside = document.getElementById('applyAside');
+      if (aside) aside.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    };
+    if (mLabel) mLabel.textContent = 'Apply now';
+  }
+
   let applyCard = '';
   if (!loggedIn) {
     applyCard = `

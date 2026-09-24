@@ -6,6 +6,25 @@ const jobsState = { page: 1, totalPages: 1 };
 
 const TYPE_FILTERS = ['Full-time', 'Remote', 'Part-time', 'Contract', 'Internship', 'Temporary'];
 
+function jobCardSkeleton() {
+  return `
+    <div class="skel-job" aria-hidden="true">
+      <div style="display:flex;gap:16px;align-items:center">
+        <div class="skeleton-box" style="width:48px;height:48px;border-radius:var(--r-ctl);flex-shrink:0"></div>
+        <div style="flex:1;display:flex;flex-direction:column;gap:8px">
+          <div class="skeleton-box skel-line" style="width:55%"></div>
+          <div class="skeleton-box skel-line" style="width:35%"></div>
+        </div>
+      </div>
+      <div class="skeleton-box skel-line" style="width:70%"></div>
+      <div class="skeleton-box skel-line" style="width:90%"></div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:4px">
+        <div class="skeleton-box skel-line" style="width:30%"></div>
+        <div class="skeleton-box" style="width:110px;height:36px;border-radius:var(--r-ctl)"></div>
+      </div>
+    </div>`;
+}
+
 function jobCard(job) {
   const snippet = job.snippet || '';
   const more = snippet.length >= 180 ? '…' : '';
@@ -73,7 +92,7 @@ async function loadJobs() {
   const alertBox = document.getElementById('alertBox');
   const found = document.getElementById('foundCount');
   const pageInfo = document.getElementById('pageInfo');
-  list.innerHTML = '<div class="loading">Loading jobs…</div>';
+  list.innerHTML = jobCardSkeleton().repeat(4);
   pager.style.display = 'none';
   alertBox.innerHTML = '';
 
@@ -170,15 +189,6 @@ function initJobsPage() {
     document.getElementById('verifiedCount').textContent = 'Track every application under My Applications';
   }
 
-  if (qsParam('denied') === 'admin') {
-    document.getElementById('alertBox').innerHTML =
-      '<div class="alert alert-error"><span class="msi">shield</span><div><p class="t">Admin access required</p><p class="small">Sign in with an administrator account to use the Admin Portal.</p></div></div>';
-  }
-  if (qsParam('denied') === 'user') {
-    document.getElementById('alertBox').innerHTML =
-      '<div class="alert alert-error"><span class="msi">shield</span><div><p class="t">Candidate accounts only</p><p class="small">That page is only available to job-seeker accounts.</p></div></div>';
-  }
-
   document.getElementById('filters').addEventListener('submit', (e) => {
     e.preventDefault();
     jobsState.page = 1;
@@ -186,6 +196,16 @@ function initJobsPage() {
   });
 
   document.getElementById('clearFilters').addEventListener('click', clearFilters);
+
+  // Mobile: filters panel collapses behind a toggle button.
+  const fToggle = document.getElementById('filterToggle');
+  const fPanel = document.getElementById('filterPanel');
+  if (fToggle && fPanel) {
+    fToggle.addEventListener('click', () => {
+      const open = fPanel.classList.toggle('open');
+      fToggle.setAttribute('aria-expanded', String(open));
+    });
+  }
 
   document.querySelectorAll('#trending button').forEach((b) =>
     b.addEventListener('click', () => {
@@ -195,7 +215,18 @@ function initJobsPage() {
     })
   );
 
-  loadJobs();
+  // Render access-denied notices after loadJobs completes — loadJobs clears the
+  // alert box at the start of each fetch, which would otherwise wipe the banner.
+  loadJobs().then(() => {
+    if (qsParam('denied') === 'admin') {
+      document.getElementById('alertBox').innerHTML =
+        '<div class="alert alert-error"><span class="msi">shield</span><div><p class="t">Admin access required</p><p class="small">Sign in with an administrator account to use the Admin Portal.</p></div></div>';
+    }
+    if (qsParam('denied') === 'user') {
+      document.getElementById('alertBox').innerHTML =
+        '<div class="alert alert-error"><span class="msi">shield</span><div><p class="t">Candidate accounts only</p><p class="small">That page is only available to job-seeker accounts.</p></div></div>';
+    }
+  });
 }
 
 initJobsPage();
