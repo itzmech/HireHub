@@ -8,8 +8,10 @@
  * module lets a deployment seed an initial admin and optional demo content
  * from environment variables — idempotent, never hard-coding credentials.
  *
- * Activated only when the corresponding env vars are present:
- *   ADMIN_EMAIL + ADMIN_PASSWORD  -> ensure the admin account exists
+ * Activated by ADMIN_PASSWORD (see below):
+ *   ADMIN_PASSWORD                -> ensure the demo admin account exists
+ *   ADMIN_EMAIL (optional)        -> overrides the default admin@demo.com
+ *   ADMIN_NAME (optional)         -> display name (default "Portal Admin")
  *   SEED_DEMO_JOBS=1              -> insert sample jobs if the table is empty
  *
  * Local development is unaffected: local uses `npm run seed` against a
@@ -80,10 +82,19 @@ function ensureProductionSeed() {
   const results = { admin: 'skipped', demoJobs: 'skipped' };
 
   // --- Admin account -------------------------------------------------------
-  const email = (process.env.ADMIN_EMAIL || '').trim().toLowerCase();
+  // Deterministic demo admin: setting ADMIN_PASSWORD is enough — the email
+  // defaults to admin@demo.com (override with ADMIN_EMAIL). Idempotent: an
+  // existing account is never duplicated, modified, or promoted. The plaintext
+  // password exists only in the environment; the database stores a bcrypt hash
+  // and no log line ever contains the password value.
+  const email = (process.env.ADMIN_EMAIL || 'admin@demo.com').trim().toLowerCase();
   const password = process.env.ADMIN_PASSWORD;
-  if (email && password) {
-    if (get('SELECT id FROM users WHERE email = ?', [email])) {
+  if (password) {
+    if (typeof password !== 'string' || password.length < 6) {
+      // Mirror the registration policy; skip rather than seed an unusable
+      // account. The value itself is never logged.
+      results.admin = 'skipped-weak-password';
+    } else if (get('SELECT id FROM users WHERE email = ?', [email])) {
       results.admin = 'exists';
     } else {
       const hash = bcrypt.hashSync(password, 10);
