@@ -1,18 +1,24 @@
 'use strict';
 
 /**
- * Opt-in production bootstrap for serverless deploys (Vercel).
+ * Serverless cold-boot seed (Vercel).
  *
  * The SQLite schema is created automatically at boot (db.js), but the runtime
  * starts with an EMPTY database: no admin account and no job listings. This
- * module lets a deployment seed an initial admin and optional demo content
- * from environment variables — idempotent, never hard-coding credentials.
+ * module makes every fresh database immediately demo-ready:
  *
- * Activated by ADMIN_PASSWORD (see below):
- *   ADMIN_PASSWORD                -> ensure the demo admin account exists
- *   ADMIN_EMAIL (optional)        -> overrides the default admin@demo.com
- *   ADMIN_NAME (optional)         -> display name (default "Portal Admin")
- *   SEED_DEMO_JOBS=1              -> insert sample jobs if the table is empty
+ *   ADMIN_PASSWORD (optional env)  -> admin password override
+ *   ADMIN_EMAIL (optional env)     -> admin email override (default admin@demo.com)
+ *   ADMIN_NAME (optional env)      -> display name (default "Demo Admin")
+ *
+ * When the overrides are absent, a deterministic DEMO admin is seeded
+ * (admin@demo.com / DemoAdmin@123) so free-tier deployments without
+ * environment-variable support still get a working admin. DEMO CREDENTIALS ARE
+ * PUBLIC (this repo is public): set ADMIN_PASSWORD/ADMIN_EMAIL in the hosting
+ * environment to override them, or set DISABLE_DEMO_ADMIN=1 to skip seeding
+ * entirely. Idempotent: an existing account is never duplicated or modified.
+ * Only the bcrypt hash is stored; the plaintext never appears in logs, APIs,
+ * or frontend code.
  *
  * Local development is unaffected: local uses `npm run seed` against a
  * persistent database file.
@@ -20,6 +26,14 @@
 
 const bcrypt = require('bcryptjs');
 const { get, run } = require('./db');
+
+// Public demo credentials, overridable via environment. The plaintext lives
+// only here (server-side seed) and in the database as a bcrypt hash.
+const DEMO_ADMIN = {
+  email: 'admin@demo.com',
+  password: 'DemoAdmin@123',
+  name: 'Demo Admin',
+};
 
 const DEMO_JOBS = [
   {
@@ -82,32 +96,37 @@ function ensureProductionSeed() {
   const results = { admin: 'skipped', demoJobs: 'skipped' };
 
   // --- Admin account -------------------------------------------------------
-  // Deterministic demo admin: setting ADMIN_PASSWORD is enough — the email
-  // defaults to admin@demo.com (override with ADMIN_EMAIL). Idempotent: an
-  // existing account is never duplicated, modified, or promoted. The plaintext
-  // password exists only in the environment; the database stores a bcrypt hash
-  // and no log line ever contains the password value.
-  const email = (process.env.ADMIN_EMAIL || 'admin@demo.com').trim().toLowerCase();
-  const password = process.env.ADMIN_PASSWORD;
-  if (password) {
-    if (typeof password !== 'string' || password.length < 6) {
-      // Mirror the registration policy; skip rather than seed an unusable
-      // account. The value itself is never logged.
-      results.admin = 'skipped-weak-password';
-    } else if (get('SELECT id FROM users WHERE email = ?', [email])) {
-      results.admin = 'exists';
-    } else {
-      const hash = bcrypt.hashSync(password, 10);
-      run(
-        "INSERT INTO users (name, email, password_hash, role) VALUES (?, ?, ?, 'admin')",
-        [process.env.ADMIN_NAME || 'Portal Admin', email, hash]
-      );
-      results.admin = 'created';
-    }
+  // Deterministic seed: every fresh/empty database gets a working admin.
+  // Environment overrides take precedence over the public demo defaults;
+  // DISABLE_DEMO_ADMIN=1 skips admin seeding entirely. Idempotent: an existing
+  // account is never duplicated, modified, or promoted. Weak configured
+  // passwords (<6 chars, mirroring the registration policy) are skipped rather
+  // than seeded. The plaintext value is never logged.
+  const disabled = process.env.DISABLE_DEMO_ADMIN === '1';
+  const email = (process.env.ADMIN_EMAIL || DEMO_ADMIN.email).trim().toLowerCase();
+  const password = process.env.ADMIN_PASSWORD || DEMO_ADMIN.password;
+  const name = process.env.ADMIN_NAME || DEMO_ADMIN.name;
+  if (disabled && !process.env.ADMIN_PASSWORD) {
+    results.admin = 'disabled';
+  } else if (typeof password !== 'string' || password.length < 6) {
+    results.admin = 'skipped-weak-password';
+  } else if (get('SELECT id FROM users WHERE email = ?', [email])) {
+    results.admin = 'exists';
+  } else {
+    const hash = bcrypt.hashSync(password, 10);
+    run(
+      "INSERT INTO users (name, email, password_hash, role) VALUES (?, ?, ?, 'admin')",
+      [name, email, hash]
+    );
+    results.admin = 'created';
   }
 
   // --- Demo job listings ----------------------------------------------------
-  if (process.env.SEED_DEMO_JOBS === '1') {
+  // Fresh databases ship with sample listings so the demo is never a blank
+  // jobs page. SEED_DEMO_JOBS=0 opts out; otherwise auto-seed only when empty.
+  if (process.env.SEED_DEMO_JOBS === '0') {
+    results.demoJobs = 'disabled';
+  } else {
     const { n } = get('SELECT COUNT(*) AS n FROM jobs');
     if (n > 0) {
       results.demoJobs = 'already-present';

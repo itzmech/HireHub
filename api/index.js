@@ -15,13 +15,14 @@ let bootError = null;
 try {
   app = require('../backend/server');
 
-  // Serverless cold-boot bootstrap: on Vercel the SQLite database starts EMPTY
-  // (no admin, no jobs). When ADMIN_EMAIL/ADMIN_PASSWORD are configured, the
-  // first invocation after a cold start ensures the admin account exists, and
-  // SEED_DEMO_JOBS=1 optionally populates the jobs table. All steps are
-  // idempotent; local development is unaffected. Seeding failures are logged
-  // but do not take the API down — per-request handlers and /api/health/db
-  // surface database problems instead.
+  // Serverless cold-boot bootstrap: on Vercel the SQLite database starts
+  // EMPTY (no admin, no jobs). The first invocation after a cold start seeds a
+  // deterministic demo admin (admin@demo.com by default; override via
+  // ADMIN_EMAIL/ADMIN_PASSWORD, disable via DISABLE_DEMO_ADMIN=1) and sample
+  // job listings (only if the table is empty; SEED_DEMO_JOBS=0 opts out). All
+  // steps are idempotent; local development is unaffected. Seeding failures
+  // are logged but do not take the API down — per-request handlers and
+  // /api/health/db surface database problems instead.
   if (process.env.VERCEL) {
     try {
       const { ensureProductionSeed } = require('../backend/database/bootstrap');
