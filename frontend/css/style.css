@@ -259,7 +259,7 @@ h1, h2, h3, h4 { color: var(--ink); letter-spacing: -0.01em; }
 textarea.input { min-height: 110px; resize: vertical; }
 
 .input-icon { position: relative; }
-.input-icon .msi {
+.input-icon > .msi {
   position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
   font-size: 18px; color: var(--ink-4); pointer-events: none;
 }
